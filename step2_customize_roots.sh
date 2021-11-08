@@ -20,7 +20,7 @@ set -u                  # treat unset variable as error
 ##########
 echo "Mount dependency points"
 
-for mnt in sys proc dev dev/pts; do
+for mnt in sys proc dev dev/pts tmp; do
     mount -o bind "/$mnt" "$ROOT_DIR/$mnt"
 done
 
@@ -45,10 +45,9 @@ Acquire::https::Verify-Host "false";
 EOF
 
 cat << EOF > $ROOT_DIR/etc/apt/sources.list
-deb [arch=$ARCH] $REPO $RELEASE main
-deb [arch=$ARCH] $REPO $RELEASE universe
-deb [arch=$ARCH] $REPO ${RELEASE}-updates main
-deb [arch=$ARCH] $REPO ${RELEASE}-security main
+deb [arch=$ARCH] $REPO ${RELEASE} main restricted universe multiverse
+deb [arch=$ARCH] $REPO ${RELEASE}-updates main restricted universe multiverse
+deb [arch=$ARCH] $REPO ${RELEASE}-security main restricted universe multiverse
 EOF
 
 if [ $JETSON_PACKAGE == "online" ]; then
@@ -194,6 +193,6 @@ chroot $ROOT_DIR apt autoremove -y
 ##########
 echo "Unmount dependency points"
 
-for mnt in dev/pts dev proc sys; do
+for mnt in tmp dev/pts dev proc sys; do
   umount "$ROOT_DIR/$mnt"
 done

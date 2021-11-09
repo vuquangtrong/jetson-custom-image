@@ -6,9 +6,17 @@
 # step 5: create image
 
 ##########
+echo "Check root permission"
+
+if [ "x$(whoami)" != "xroot" ]; then
+	echo "This script requires root privilege!!!"
+	exit 1
+fi
+
+##########
 echo "Get environment"
 
-. ./step0_env.sh
+source ./step0_env.sh
 
 ##########
 echo "Set script options"
@@ -18,8 +26,9 @@ set -o pipefail         # exit on pipeline error
 set -u                  # treat unset variable as error
 
 ##########
-echo "Create image"
+IMAGE=${JETSON_BOARD}_${RELEASE}_${JETSON_PLAT}_${JETSON_REL}_${JETSON_DESKTOP}.img
+echo "Create image ${IMAGE}"
 
-pushd $WORK_DIR/Linux_for_Tegra/tools
+pushd ${WORK_DIR}/Linux_for_Tegra/tools
 
-./jetson-disk-image-creator.sh -o jetson.img -b jetson-nano -r 300
+./jetson-disk-image-creator.sh -o ${IMAGE} -b ${JETSON_BOARD_IMG} -r ${JETSON_BOARD_REV}

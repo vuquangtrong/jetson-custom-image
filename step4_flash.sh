@@ -6,9 +6,17 @@
 # step 4: flash image
 
 ##########
+echo "Check root permission"
+
+if [ "x$(whoami)" != "xroot" ]; then
+	echo "This script requires root privilege!!!"
+	exit 1
+fi
+
+##########
 echo "Get environment"
 
-. ./step0_env.sh
+source ./step0_env.sh
 
 ##########
 echo "Set script options"
@@ -20,8 +28,8 @@ set -u                  # treat unset variable as error
 ##########
 echo "Flash image"
 
-pushd $WORK_DIR/Linux_for_Tegra
+pushd ${WORK_DIR}/Linux_for_Tegra
 
-./flash.sh jetson-nano-devkit mmcblk0p1
+./flash.sh ${JETSON_BOARD} mmcblk0p1
 
 exit

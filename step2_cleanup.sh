@@ -21,5 +21,5 @@ set -u                  # treat unset variable as error
 echo "Unmount dependency points"
 
 for mnt in dev/pts dev proc sys; do
-  umount "$ROOT_DIR/$mnt"
+  umount "${ROOT_DIR}/$mnt"
 done

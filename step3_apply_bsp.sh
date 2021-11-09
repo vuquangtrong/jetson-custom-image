@@ -6,9 +6,17 @@
 # step 3: apply JETSON_BSP
 
 ##########
+echo "Check root permission"
+
+if [ "x$(whoami)" != "xroot" ]; then
+	echo "This script requires root privilege!!!"
+	exit 1
+fi
+
+##########
 echo "Get environment"
 
-. ./step0_env.sh
+source ./step0_env.sh
 
 ##########
 echo "Set script options"
@@ -19,64 +27,66 @@ set -u                  # treat unset variable as error
 
 ##########
 
-if [ ! -f $JETSON_BSP ]
-then 
+if [ ! -f ${JETSON_BSP} ]; then 
     echo "Download JETSON_BSP"
-    wget $JETSON_BSP_URL
+    wget ${JETSON_BSP_URL}
 fi
 
 ##########
-echo "Extract JETSON_BSP"
 
-if [ ! -d $WORK_DIR/Linux_for_Tegra ]
-then
-    tar jxpf $JETSON_BSP -C $WORK_DIR
+if [ ! -d ${WORK_DIR}/Linux_for_Tegra ]; then
+    echo "Extract JETSON_BSP"
+    tar jxpf ${JETSON_BSP} -C ${WORK_DIR}
 fi
 
 ##########
 echo "Copy rootfs"
 
-rm -rf $WORK_DIR/Linux_for_Tegra/rootfs
-cp -rf $ROOT_DIR $WORK_DIR/Linux_for_Tegra/
+rm -rf ${WORK_DIR}/Linux_for_Tegra/rootfs
+cp -rf ${ROOT_DIR} ${WORK_DIR}/Linux_for_Tegra/
 
+# below device files conflict with L4T package install
 declare -a remove_files=(
     "dev/random"
     "dev/urandom"
 )
 
 for file in "${remove_files[@]}"; do
-    uri=$WORK_DIR/Linux_for_Tegra/rootfs/$file
+    uri=${WORK_DIR}/Linux_for_Tegra/rootfs/$file
     if [ -e "$uri" ]
     then
         rm -f $uri
     fi
 done
 
-if [ $JETSON_PACKAGE == "online" ]; then
-
 ##########
-echo "Copy extlinux.conf"
+echo "Set up permission"
 
-pushd $WORK_DIR/Linux_for_Tegra/
+# copy from rootfs to L4T does not keep the sudo flag
+# so, do set the flag here
+chroot ${WORK_DIR}/Linux_for_Tegra/rootfs bash -c "echo root:$ROOT_PWD | chpasswd"
+chroot ${WORK_DIR}/Linux_for_Tegra/rootfs bash -c "chown root:root /usr/bin/sudo"
+chroot ${WORK_DIR}/Linux_for_Tegra/rootfs bash -c "chmod u+s /usr/bin/sudo"
 
-install -Dm644 bootloader/extlinux.conf rootfs/boot/extlinux/extlinux.conf
-
-else
+# this to fix error when install package
+chroot ${WORK_DIR}/Linux_for_Tegra/rootfs bash -c "chown -R man:man /var/cache/man"
+chroot ${WORK_DIR}/Linux_for_Tegra/rootfs bash -c "chmod -R 775 /var/cache/man"
 
 ##########
 echo "Apply jetson binaries"
 
-rm -f $WORK_DIR/Linux_for_Tegra/rootfs/etc/apt/sources.list.d/nvidia-l4t-apt-source.list
-
-pushd $WORK_DIR/Linux_for_Tegra/
-
+pushd ${WORK_DIR}/Linux_for_Tegra/
 ./apply_binaries.sh
-
-fi
+popd
 
 ##########
-echo "Add user"
+echo "Add user: ${JETSON_USR}"
 
-pushd $WORK_DIR/Linux_for_Tegra/tools
+pushd ${WORK_DIR}/Linux_for_Tegra/tools
+./l4t_create_default_user.sh -u ${JETSON_USR} -p ${JETSON_PWD} -n ${JETSON_NAME} --accept-license
+# ./l4t_create_default_user.sh -u ${JETSON_USR} -p ${JETSON_PWD} -n ${JETSON_NAME} --autologin --accept-license
+popd
 
-./l4t_create_default_user.sh -u $JETSON_USR -p $JETSON_PWD -n $JETSON_NAME --autologin --accept-license
+cat << EOF > ${WORK_DIR}/Linux_for_Tegra/rootfs/etc/sudoers.d/${JETSON_USR}
+${JETSON_USR} ALL=(ALL) NOPASSWD: ALL
+EOF

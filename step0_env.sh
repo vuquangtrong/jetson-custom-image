@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Create a base custome image for jetson nano
+# Create a base custom image for jetson nano
 # vuquangtrong@gmail.com
 #
 # step 0: set up environment
@@ -24,6 +24,7 @@ REPO=http://mirror.coganng.com/ubuntu-ports
 echo "Set target platform"
 
 JETSON_BOARD=jetson-nano-devkit
+JETSON_STORAGE=mmcblk0p1
 JETSON_BOARD_IMG=jetson-nano
 JETSON_BOARD_REV=300
 JETSON_PLAT=t210
@@ -47,7 +48,7 @@ JETSON_PWD=cccc
 echo "Set desktop manager"
 
 # leave it empty to not install any DE
-JETSON_DESKTOP=
+# JETSON_DESKTOP=
 
 # just a minimal desktop
 # JETSON_DESKTOP=openbox
@@ -55,8 +56,8 @@ JETSON_DESKTOP=
 # some panels from lxde
 # JETSON_DESKTOP=lxde
 
-# look better than lxde
-JETSON_DESKTOP=lubuntu
+# look better and lightweight
+JETSON_DESKTOP=xubuntu
 
 # more similar to ubuntu
 # JETSON_DESKTOP=ubuntu-mate

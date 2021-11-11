@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Create a base custome image for jetson nano
+# Create a base custom image for jetson nano
 # vuquangtrong@gmail.com
 #
 # step 4: flash image
@@ -30,6 +30,4 @@ echo "Flash image"
 
 pushd ${WORK_DIR}/Linux_for_Tegra
 
-./flash.sh ${JETSON_BOARD} mmcblk0p1
-
-exit
+./flash.sh ${JETSON_BOARD} ${JETSON_STORAGE}

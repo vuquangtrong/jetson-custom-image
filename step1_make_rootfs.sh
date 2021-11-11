@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Create a base custome image for jetson nano
+# Create a base custom image for jetson nano
 # vuquangtrong@gmail.com
 #
 # step 1: make rootfs

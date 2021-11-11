@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Create a base custome image for jetson nano
+# Create a base custom image for jetson nano
 # vuquangtrong@gmail.com
 #
 # step 6: flash SD card
@@ -47,7 +47,7 @@ if [ "$(mount | grep $1)" ]; then
 fi
 
 ##########
-printf "Flash $1"
+echo "Flash $1"
 dd if=${IMAGE} of=$1 bs=4M conv=fsync status=progress
 
 ##########
@@ -69,15 +69,16 @@ sgdisk -c 1:APP $1
 ##########
 echo "Extend the filesystem"
 
-if [[ $(basename $1) =~ "mmc*" ]]; then
+if [[ $(basename $1) =~ mmc ]]; then
 	e2fsck -fp $1"p1"
 	resize2fs $1"p1"
 fi
 
-if [[ $(basename $1) =~ "sd*" ]]; then
+if [[ $(basename $1) =~ sd ]]; then
 	e2fsck -fp $1"1"
 	resize2fs $1"1"
 fi
+
 sync
 
 echo "DONE!"

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Create a base custome image for jetson nano
+# Create a base custom image for jetson nano
 # vuquangtrong@gmail.com
 #
 # step 2: customize rootfs
@@ -105,13 +105,20 @@ chroot ${ROOT_DIR} apt install -y --no-install-recommends \
     libxrender1 \
     python \
     python3 \
+
+##########
+echo "Install systen packages"
+
+# below packages are needed for systen
+chroot ${ROOT_DIR} apt install -y --no-install-recommends \
     wget \
     curl \
     linux-firmware \
     device-tree-compiler \
     network-manager \
     net-tools \
-    wireless-tools
+    wireless-tools \
+    ssh \
 
 ##########
 echo "Install X GUI"
@@ -119,50 +126,66 @@ echo "Install X GUI"
 chroot ${ROOT_DIR} apt install -y --no-install-recommends \
     xorg
 
-if [ ${JETSON_DESKTOP} == 'openbox' ]; then
-    echo "Install Openbox"
+if [ ! -z ${JETSON_DESKTOP} ]; then
 
-    # minimal desktop, only greeter, no taskbar and background
+    if [ ${JETSON_DESKTOP} == 'openbox' ]; then
+        echo "Install Openbox"
+
+        # minimal desktop, only greeter, no taskbar and background
+        chroot ${ROOT_DIR} apt install -y --no-install-recommends \
+            lightdm-gtk-greeter \
+            lightdm \
+            openbox \
+
+    fi
+
+    if [ ${JETSON_DESKTOP} == 'lxde' ]; then
+        echo "Install LXDE core"
+
+        # lxde with some components
+        chroot ${ROOT_DIR} apt install -y --no-install-recommends \
+            lightdm-gtk-greeter \
+            lightdm \
+            lxde-icon-theme \
+            lxde-core \
+            lxde-common \
+            policykit-1 lxpolkit \
+            lxsession-logout \
+            gvfs-backends \
+
+    fi
+
+    if [ ${JETSON_DESKTOP} == 'xubuntu' ]; then
+        echo "Install Xubuntu core"
+
+        # Xubuntu, better than lxde
+        chroot ${ROOT_DIR} apt install -y --no-install-recommends \
+            xubuntu-core \
+
+    fi
+
+    if [ ${JETSON_DESKTOP} == 'ubuntu-mate' ]; then
+        echo "Install Ubuntu Mate"
+
+        # Ubuntu-Mate, similar to Ubuntu
+        chroot ${ROOT_DIR} apt install -y --no-install-recommends \
+            ubuntu-mate-core \
+
+    fi
+
+    # below packages are needed for desktop
     chroot ${ROOT_DIR} apt install -y --no-install-recommends \
-        lightdm-gtk-greeter \
-        lightdm \
-        openbox \
+        onboard \
 
 fi
 
-if [ ${JETSON_DESKTOP} == 'lxde' ]; then
-    echo "Install LXDE core"
+##########
+echo "Install extra packages"
 
-    # lxde with some components
-    chroot ${ROOT_DIR} apt install -y --no-install-recommends \
-        lightdm-gtk-greeter \
-        lightdm \
-        lxde-icon-theme \
-        lxde-core \
-        lxde-common \
-        policykit-1 lxpolkit \
-        lxsession-logout \
-        gvfs-backends \
-
-fi
-
-if [ ${JETSON_DESKTOP} == 'lubuntu' ]; then
-    echo "Install Lubuntu core"
-
-    # Lubuntu, better than lxde
-    chroot ${ROOT_DIR} apt install -y --no-install-recommends \
-        xubuntu-core \
-
-fi
-
-if [ ${JETSON_DESKTOP} == 'ubuntu-mate' ]; then
-    echo "Install Ubuntu Mate"
-
-    # Ubuntu-Mate, similar to Ubuntu
-    chroot ${ROOT_DIR} apt install -y --no-install-recommends \
-        ubuntu-mate-core \
-
-fi
+# below packages are needed for desktop
+chroot ${ROOT_DIR} apt install -y --no-install-recommends \
+    htop \
+    nano \
 
 ##########
 echo "Clean up"

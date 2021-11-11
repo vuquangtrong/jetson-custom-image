@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Create a base custome image for jetson nano
+# Create a base custom image for jetson nano
 # vuquangtrong@gmail.com
 #
 # step 3: apply JETSON_BSP
@@ -90,3 +90,9 @@ popd
 cat << EOF > ${WORK_DIR}/Linux_for_Tegra/rootfs/etc/sudoers.d/${JETSON_USR}
 ${JETSON_USR} ALL=(ALL) NOPASSWD: ALL
 EOF
+
+
+##########
+# if you want to modify BSP, please do that here
+# e.g.
+# ./custom/patch_bsp.sh

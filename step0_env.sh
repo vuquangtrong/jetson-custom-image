@@ -62,6 +62,11 @@ JETSON_DESKTOP=xubuntu
 # more similar to ubuntu
 # JETSON_DESKTOP=ubuntu-mate
 
+echo "Set network settings"
+
+WIFI_SSID="Your WiFi Acess Point"
+WIFI_PASS="Your WiFi Password"
+
 ##########
 echo "Prepare environment"
 

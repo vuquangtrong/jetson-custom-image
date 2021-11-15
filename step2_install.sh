@@ -198,9 +198,21 @@ echo "Set up networks"
 # ubuntu 18.04 us netplan, so it does not use /etc/network/interfaces anymore
 cat << EOF > ${ROOT_DIR}/etc/netplan/01-netconf.yaml
 network:
+    version: 2
+    renderer: NetworkManager
     ethernets:
         eth0:
+            optional: true
             dhcp4: true
+    # add wifi setup information here ...
+    wifis:
+        wlan0:
+            access-points:
+                "${WIFI_SSID}":
+                    password: "${WIFI_PASS}"
+            dhcp4: true
+            dhcp4-overrides:
+                route-metric: 50
 EOF
 
 cat << EOF > ${ROOT_DIR}/etc/hostname

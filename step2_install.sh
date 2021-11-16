@@ -191,6 +191,7 @@ chroot ${ROOT_DIR} apt install -y --no-install-recommends \
 echo "Clean up"
 
 chroot ${ROOT_DIR} apt autoremove -y
+chroot ${ROOT_DIR} apt clean
 
 ##########
 echo "Set up networks"

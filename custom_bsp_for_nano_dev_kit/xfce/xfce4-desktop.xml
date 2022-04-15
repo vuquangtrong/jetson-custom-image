@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<channel name="xfce4-desktop" version="1.0">
+  <property name="desktop-icons" type="empty">
+    <property name="show-tooltips" type="bool" value="false"/>
+    <property name="icon-size" type="uint" value="32"/>
+    <property name="single-click" type="bool" value="true"/>
+  </property>
+</channel>

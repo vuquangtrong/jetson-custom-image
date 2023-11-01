@@ -46,22 +46,17 @@ then
     debootstrap \
         --verbose \
         --foreign \
-        --make-tarball=${ARCH}-${RELEASE}.tgz \
         --arch=${ARCH} \
         ${RELEASE} \
         ${ROOT_DIR} \
         ${REPO}
+    tar -cvzf ${ARCH}-${RELEASE}.tgz -C ${ROOT_DIR} .
 fi
 
 echo "Install packages from ${ARCH}-${RELEASE}.tgz"
-debootstrap \
-    --verbose \
-    --foreign \
-    --unpack-tarball=$(realpath ${ARCH}-${RELEASE}.tgz) \
-    --arch=${ARCH} \
-    ${RELEASE} \
-    ${ROOT_DIR} \
-    ${REPO}
+rm -rf ${ROOT_DIR}
+mkdir -p ${ROOT_DIR}
+tar -xvzf ${ARCH}-${RELEASE}.tgz -C ${ROOT_DIR}
 
 ##########
 echo "Install virtual machine"

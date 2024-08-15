@@ -32,3 +32,7 @@ echo "Create image ${IMAGE}"
 pushd ${WORK_DIR}/Linux_for_Tegra/tools
 
 ./jetson-disk-image-creator.sh -o ${IMAGE} -b ${JETSON_BOARD_IMG} -r ${JETSON_BOARD_REV}
+
+if [ -f ${IMAGE} ]; then 
+	echo "Please copy the image at ${IMAGE}"
+fi

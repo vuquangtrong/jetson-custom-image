@@ -16,7 +16,7 @@ fi
 ##########
 echo "Get environment"
 
-source ../jetson-custom-image/step0_env.sh
+source ../step0_env.sh
 
 WORK_ROOT_DIR=${WORK_DIR}/Linux_for_Tegra/rootfs
 
@@ -57,8 +57,8 @@ autologin-user=${JETSON_USR}
 autologin-user-timeout=0
 EOF
 
-WIFI_SSID="SWEET HOME"
-WIFI_PASS="conchocon"
+WIFI_SSID="HomeSweetHome"
+WIFI_PASS="Kh0ngch0d@u"
 cat << EOF > ${WORK_ROOT_DIR}/etc/netplan/01-netconf.yaml
 network:
     version: 2

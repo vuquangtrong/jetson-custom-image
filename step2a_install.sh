@@ -196,7 +196,8 @@ chroot ${ROOT_DIR} apt clean
 ##########
 echo "Set up networks"
 
-# ubuntu 18.04 us netplan, so it does not use /etc/network/interfaces anymore
+# Since Ubuntu 18.04, netplan does not use /etc/network/interfaces anymore
+if [ ! -z ${WIFI_SSID} ]; then
 cat << EOF > ${ROOT_DIR}/etc/netplan/01-netconf.yaml
 network:
     version: 2
@@ -215,6 +216,7 @@ network:
             dhcp4-overrides:
                 route-metric: 50
 EOF
+fi
 
 cat << EOF > ${ROOT_DIR}/etc/hostname
 ${JETSON_NAME}

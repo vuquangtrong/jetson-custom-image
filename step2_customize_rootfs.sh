@@ -5,8 +5,8 @@
 #
 # step 2: customize rootfs
 
-./step2_install.sh # run installation
+./step2a_install.sh # run installation
 ret=$? # return 0 if no error
 if [ $ret -ne 0 ]; then
-    ./step2_cleanup.sh # clean up if something is wrong
+    ./step2b_cleanup.sh # clean up if something is wrong
 fi

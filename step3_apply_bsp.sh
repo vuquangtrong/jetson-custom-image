@@ -83,8 +83,8 @@ popd
 echo "Add user: ${JETSON_USR}"
 
 pushd ${WORK_DIR}/Linux_for_Tegra/tools
-./l4t_create_default_user.sh -u ${JETSON_USR} -p ${JETSON_PWD} -n ${JETSON_NAME} --accept-license
-# ./l4t_create_default_user.sh -u ${JETSON_USR} -p ${JETSON_PWD} -n ${JETSON_NAME} --autologin --accept-license
+# ./l4t_create_default_user.sh -u ${JETSON_USR} -p ${JETSON_PWD} -n ${JETSON_NAME} --accept-license
+./l4t_create_default_user.sh -u ${JETSON_USR} -p ${JETSON_PWD} -n ${JETSON_NAME} --autologin --accept-license
 popd
 
 cat << EOF > ${WORK_DIR}/Linux_for_Tegra/rootfs/etc/sudoers.d/${JETSON_USR}
@@ -95,4 +95,4 @@ EOF
 ##########
 # if you want to modify BSP, please do that here
 # e.g.
-# ./custom/patch_bsp.sh
+# ./custom_bsp_for_nano_dev_kit/step3b_customize_bsp.sh

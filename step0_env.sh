@@ -6,20 +6,23 @@
 # step 0: set up environment
 
 ##########
-echo "Set target release version"
+echo "Set target architecture"
 
 ARCH=arm64
+
+echo "Set target distro"
+
+# Ubuntu release version, e.g. Ubuntu 18.04.6
 RELEASE=bionic
-REPO=http://mirror.coganng.com/ubuntu-ports
-# REPO=http://mirror.misakamikoto.network/ubuntu-ports
 
-# If REPO is empty, http://ports.ubuntu.com/ubuntu-ports will be used
-
-# Use below script to get the fastest repo
+# Use below script to get the fastest repo, after that skip script to run faster
 # if [ -z "${REPO}" ]
 # then
-#     REPO=$(./find_mirrors.sh arm64 bionic main speed | sort -k 1 | head -n 1 | awk '{print $2}')
+#     REPO=$(./find_mirrors.sh ${ARCH} ${RELEASE} main speed | sort -k 1 | head -n 1 | awk '{print $2}')
 # fi
+
+REPO=http://repo.jing.rocks/ubuntu-ports
+# If REPO is empty, http://ports.ubuntu.com/ubuntu-ports will be used, or set a REPO below
 
 echo "Set target platform"
 
@@ -28,22 +31,21 @@ JETSON_STORAGE=mmcblk0p1
 JETSON_BOARD_IMG=jetson-nano
 JETSON_BOARD_REV=300
 JETSON_PLAT=t210
-JETSON_REL=r32.6
-JETSON_BSP=jetson-210_linux_r32.6.1_aarch64.tbz2
-JETSON_BSP_URL=https://developer.nvidia.com/embedded/l4t/r32_release_v6.1/t210/jetson-210_linux_r32.6.1_aarch64.tbz2
+JETSON_REL=r32.7.5
+JETSON_BSP=jetson-210_linux_r32.7.5_aarch64.tbz2
+JETSON_BSP_URL=https://developer.nvidia.com/downloads/embedded/l4t/r32_release_v7.5/t210/jetson-210_linux_r32.7.5_aarch64.tbz2
 
 echo "Set target directories"
 
-ROOT_DIR=/home/vqtrong/jetson-custom/rootfs
-WORK_DIR=/home/vqtrong/jetson-custom/build
+ROOT_DIR=/tmp/jetson-custom/rootfs
+WORK_DIR=/tmp/jetson-custom/build
 
 echo "Set system users"
 
 ROOT_PWD=root
-
-JETSON_NAME=rover
+JETSON_NAME=nvidia
 JETSON_USR=jetson
-JETSON_PWD=cccc
+JETSON_PWD=cccccc
 
 echo "Set desktop manager"
 
@@ -64,8 +66,8 @@ JETSON_DESKTOP=xubuntu
 
 echo "Set network settings"
 
-WIFI_SSID="Your WiFi Acess Point"
-WIFI_PASS="Your WiFi Password"
+WIFI_SSID=
+WIFI_PASS=
 
 ##########
 echo "Prepare environment"
@@ -90,3 +92,6 @@ echo "JETSON_NAME = ${JETSON_NAME}"
 echo "JETSON_USR = ${JETSON_USR}"
 echo "JETSON_PWD = ${JETSON_PWD}"
 echo "JETSON_DESKTOP = ${JETSON_DESKTOP}"
+
+echo "WIFI_SSID = ${WIFI_SSID}"
+echo "WIFI_PASS = ${WIFI_PASS}"
